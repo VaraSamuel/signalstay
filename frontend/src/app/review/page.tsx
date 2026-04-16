@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, useRef } from "react";
+import { useEffect, useMemo, useState, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Api } from "@/lib/api";
 import { useSpeechRecognition } from "@/hooks/useSpeechRecognition";
@@ -84,7 +84,7 @@ function getTopWeakSignals(scores: AttributeScore[]) {
     .slice(0, 4);
 }
 
-export default function ReviewPage() {
+function ReviewPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -102,7 +102,7 @@ export default function ReviewPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  const { transcript, isListening, isSupported, startListening, stopListening, resetTranscript } = useSpeechRecognition();
+  const { transcript, isListening,  startListening, stopListening } = useSpeechRecognition();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const lastTranscriptRef = useRef<string>("");
 
@@ -114,9 +114,9 @@ export default function ReviewPage() {
         return combined.trim();
       });
       lastTranscriptRef.current = transcript;
-      resetTranscript();
+      
     }
-  }, [transcript, resetTranscript]);
+  }, [transcript]);
 
   const weakSignals = useMemo(() => getTopWeakSignals(scores), [scores]);
 
@@ -396,7 +396,7 @@ export default function ReviewPage() {
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <label className="text-sm font-bold text-slate-800">Your answer</label>
-                  {isSupported && (
+                  {(
                     <button
                       onClick={isListening ? stopListening : startListening}
                       className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold transition ${
@@ -531,5 +531,13 @@ export default function ReviewPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function ReviewPage() {
+  return (
+    <Suspense fallback={<div className="p-10">Loading...</div>}>
+      <ReviewPageInner />
+    </Suspense>
   );
 }

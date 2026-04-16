@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Api } from "@/lib/api";
 import ExpediaHeader from "@/components/ExpediaHeader";
@@ -160,7 +160,7 @@ function StarDisplay({ score }: { score: number }) {
   );
 }
 
-export default function DashboardPage() {
+function DashboardPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const propertyId = searchParams.get("propertyId") || "";
@@ -651,5 +651,13 @@ export default function DashboardPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={<div className="p-10">Loading...</div>}>
+      <DashboardPageInner />
+    </Suspense>
   );
 }
