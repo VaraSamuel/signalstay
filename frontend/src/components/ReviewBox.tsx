@@ -31,35 +31,31 @@ export default function ReviewBox({
     }
   }, [transcript, setReviewText]);
 
-  const handleToggleListening = () => {
-    if (isListening) {
-      stopListening();
-    } else {
-      startListening();
-    }
-  };
-
   return (
     <section className="p-6">
       <VoiceInputButton
         isSupported={true}
         isListening={isListening}
-        onToggle={handleToggleListening}
-        label="Toggle voice input"
+        isReady={true}
+        onStart={startListening}
+        onStop={stopListening}
       />
 
-      {error && <div className="text-red-500">{error}</div>}
+      {error ? (
+        <div className="mt-2 text-sm text-red-500">{error}</div>
+      ) : null}
 
       <textarea
         value={reviewText}
         onChange={(e) => setReviewText(e.target.value)}
-        className="w-full border p-3 rounded-lg"
+        className="mt-4 w-full rounded-lg border p-3"
+        placeholder="Write your review..."
       />
 
       <button
         onClick={onAnalyze}
         disabled={loading}
-        className="mt-4 bg-black text-white px-4 py-2 rounded-lg"
+        className="mt-4 rounded-lg bg-black px-4 py-2 text-white"
       >
         {loading ? "Analyzing..." : "Analyze"}
       </button>
