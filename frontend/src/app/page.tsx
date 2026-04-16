@@ -50,7 +50,7 @@ export default function HomePage() {
             <div className="max-w-2xl">
               <div className="inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-1.5 text-sm font-semibold text-[#0A438B] mb-4">
                 <span className="h-2 w-2 rounded-full bg-[#0A438B] animate-pulse" />
-                Live · Wharton AI Hackathon 2025
+                Live · Wharton AI Hackathon 2026
               </div>
               <h1 className="text-4xl md:text-5xl font-extrabold leading-tight text-[#0A438B]">
                 The right question,<br />
