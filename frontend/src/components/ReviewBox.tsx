@@ -25,15 +25,22 @@ export default function ReviewBox({
   );
 
   const {
-    isSupported,
     isListening,
     error,
-    toggleListening
+    startListening,
+    stopListening
   } = useSpeechRecognition(handleTranscript, {
     lang: "en-US",
-    continuous: true,
-    interimResults: true
+    continuous: true
   });
+
+  const handleToggleListening = () => {
+    if (isListening) {
+      stopListening();
+    } else {
+      startListening();
+    }
+  };
 
   return (
     <section className="glass-card-strong rounded-[30px] p-6">
@@ -45,9 +52,9 @@ export default function ReviewBox({
 
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <VoiceInputButton
-          isSupported={isSupported}
+          isSupported={true}
           isListening={isListening}
-          onToggle={toggleListening}
+          onToggle={handleToggleListening}
           label="Toggle review voice input"
         />
         <div className="text-xs text-slate-500">
