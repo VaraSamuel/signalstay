@@ -1,36 +1,49 @@
-import { FollowUpQuestion } from "@/lib/types";
+type FollowUpQuestion = any;
 
 type Props = {
   questions: FollowUpQuestion[];
 };
 
 export default function FollowUpQuestions({ questions }: Props) {
-  return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5">
-      <h3 className="text-lg font-semibold text-slate-900">Selected follow-up questions</h3>
-      <p className="mt-2 text-sm text-slate-500">
-        These are the minimum high-value questions still needed.
-      </p>
+  if (!questions || questions.length === 0) {
+    return null;
+  }
 
-      <div className="mt-4 space-y-3">
-        {questions.length === 0 ? (
-          <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-500">
-            No follow-up questions needed.
-          </div>
-        ) : (
-          questions.map((question, index) => (
-            <div
-              key={`${question.attribute}-${index}`}
-              className="rounded-xl border border-sky-200 bg-sky-50 p-4"
-            >
-              <div className="text-xs font-semibold uppercase tracking-[0.24em] text-sky-700">
-                Follow-up {index + 1}
-              </div>
-              <p className="mt-2 text-sm text-slate-900">{question.question}</p>
-              <p className="mt-2 text-xs text-slate-500">{question.reason}</p>
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div className="mb-3">
+        <h3 className="text-base font-semibold text-slate-900">Follow-up Questions</h3>
+        <p className="text-sm text-slate-500">
+          Suggested next questions to improve trust and reduce uncertainty
+        </p>
+      </div>
+
+      <div className="space-y-3">
+        {questions.map((q: any, idx: number) => (
+          <div key={idx} className="rounded-xl border border-slate-200 p-3">
+            <div className="text-sm font-medium text-slate-900">
+              {q.question ?? "Untitled question"}
             </div>
-          ))
-        )}
+
+            {q.why_this_question ? (
+              <div className="mt-1 text-sm text-slate-600">
+                <span className="font-medium">Why this question:</span> {q.why_this_question}
+              </div>
+            ) : null}
+
+            {q.uncertainty_reduced ? (
+              <div className="mt-1 text-sm text-slate-600">
+                <span className="font-medium">Uncertainty reduced:</span> {q.uncertainty_reduced}
+              </div>
+            ) : null}
+
+            {q.inferred_property_type ? (
+              <div className="mt-1 text-sm text-slate-600">
+                <span className="font-medium">Property type:</span> {q.inferred_property_type}
+              </div>
+            ) : null}
+          </div>
+        ))}
       </div>
     </div>
   );
